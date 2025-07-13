@@ -13,12 +13,13 @@ final class SearchBuilder {
 
         let view = SearchViewController()
 
-        guard let presenter = container.resolve(SearchPresenter.self),
-              let interactor = container.resolve(SearchInteractorProtocol.self) as? SearchInteractor,
+        guard let interactor = container.resolve(SearchInteractorProtocol.self) as? SearchInteractor,
               let router = container.resolve(SearchRouterProtocol.self) as? SearchRouter else {
             fatalError("Не удалось разрешить зависимости")
         }
 
+        // Создаем презентер руками!!!
+        let presenter = SearchPresenter(interactor: interactor, router: router)
         presenter.view = view
         interactor.output = presenter
         router.viewController = view

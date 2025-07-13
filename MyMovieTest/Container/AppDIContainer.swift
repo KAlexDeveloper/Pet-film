@@ -19,28 +19,22 @@ final class AppDIContainer {
     }
     
     private func registerDependencies() {
+        // ✅ Регистрация сервиса
         container.register(MovieServiceProtocol.self) { _ in
             MovieService()
         }
         
+        // ✅ Регистрация интерактора
         container.register(SearchInteractorProtocol.self) { resolver in
             let service = resolver.resolve(MovieServiceProtocol.self)!
             return SearchInteractor(service: service)
         }
         
+        // ✅ Регистрация роутера
         container.register(SearchRouterProtocol.self) { _ in
             SearchRouter()
         }
-        // 👉 Регистрируем конкретный класс
-        container.register(SearchPresenter.self) { resolver in
-            let interactor = resolver.resolve(SearchInteractorProtocol.self)!
-            let router = resolver.resolve(SearchRouterProtocol.self)!
-            return SearchPresenter(view: nil, interactor: interactor, router: router)
-        }
-        
-        // 👉 Опционально регистрируем под протокол
-        container.register(SearchPresenterProtocol.self) { resolver in
-            resolver.resolve(SearchPresenter.self)!
-        }
+        // ❌ Не регистрируем Presenter
+        // Мы собираем его вручную в билдере, чтобы избежать проблем с циклическими зависимостями
     }
 }

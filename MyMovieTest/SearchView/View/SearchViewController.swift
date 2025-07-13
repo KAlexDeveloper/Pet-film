@@ -105,8 +105,10 @@ final class SearchViewController: UIViewController {
 }
 
 extension SearchViewController: SearchViewProtocol {
+
     func showMovies(_ movies: [Movie]) {
-        print("Отображаем \(movies.count) фильмов")
+        print("‼️ showMovies called. Movies count: \(movies.count)")
+        movies.forEach { print("Movie title: \($0.title), poster: \($0.posterUrl ?? "nil")") }
         self.movies = movies
         collectionView.reloadData()
         emptyLabel.isHidden = !movies.isEmpty

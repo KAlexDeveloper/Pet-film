@@ -27,6 +27,7 @@ final class SearchInteractor: SearchInteractorProtocol {
         do {
             let movies = try await service.searchMovies(query: query)
             await MainActor.run {
+                print("✅ Output внутри интерактора: \(String(describing: output))")
                 output?.didReceiveMovies(movies)
             }
             print("Movies получены: \(movies.count)")

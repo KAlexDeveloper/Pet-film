@@ -17,8 +17,7 @@ final class SearchPresenter {
     private let interactor: SearchInteractorProtocol
     private let router: SearchRouterProtocol
     
-    init(view: SearchViewProtocol?, interactor: SearchInteractorProtocol, router: SearchRouterProtocol) {
-        self.view = view
+    init(interactor: SearchInteractorProtocol, router: SearchRouterProtocol) {
         self.interactor = interactor
         self.router = router
     }
