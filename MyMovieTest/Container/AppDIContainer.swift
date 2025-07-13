@@ -31,11 +31,16 @@ final class AppDIContainer {
         container.register(SearchRouterProtocol.self) { _ in
             SearchRouter()
         }
-        
-        container.register(SearchPresenterProtocol.self) { resolver in
+        // 👉 Регистрируем конкретный класс
+        container.register(SearchPresenter.self) { resolver in
             let interactor = resolver.resolve(SearchInteractorProtocol.self)!
             let router = resolver.resolve(SearchRouterProtocol.self)!
             return SearchPresenter(view: nil, interactor: interactor, router: router)
+        }
+        
+        // 👉 Опционально регистрируем под протокол
+        container.register(SearchPresenterProtocol.self) { resolver in
+            resolver.resolve(SearchPresenter.self)!
         }
     }
 }

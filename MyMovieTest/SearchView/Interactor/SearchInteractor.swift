@@ -25,7 +25,7 @@ final class SearchInteractor: SearchInteractorProtocol {
     
     func searchMovies(query: String) async {
         do {
-            let movies = try await service.searchMovies(query: query, page: 1, limit: 10 )
+            let movies = try await service.searchMovies(query: query)
             await MainActor.run {
                 output?.didReceiveMovies(movies)
             }

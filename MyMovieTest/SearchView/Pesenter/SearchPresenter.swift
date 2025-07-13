@@ -25,6 +25,7 @@ final class SearchPresenter {
 }
 
 extension SearchPresenter: SearchPresenterProtocol {
+    
     func searchButtonTapped(with query: String) {
         view?.showLoading()
         Task {
@@ -40,11 +41,13 @@ extension SearchPresenter: SearchPresenterProtocol {
 
 extension SearchPresenter: SearchInteractorOutputProtocol {
     func didReceiveMovies(_ movies: [Movie]) {
+        print("Presenter: получены фильмы, скрываем loader")
         view?.hideLoading()
         view?.showMovies(movies)
     }
-    
+
     func didFailToReceiveMovies(_ error: Error) {
+        print("Presenter: ошибка \(error.localizedDescription), скрываем loader")
         view?.hideLoading()
         view?.showError(error.localizedDescription)
     }
