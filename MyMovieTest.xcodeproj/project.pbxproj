@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		F200C6F42E1FD8A900EB31FD /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = F200C6F32E1FD8A900EB31FD /* Alamofire */; };
+		F200C6F82E1FD93700EB31FD /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F200C6F72E1FD93700EB31FD /* SnapKit */; };
+		F200C6FA2E1FD93A00EB31FD /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = F200C6F92E1FD93A00EB31FD /* Swinject */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		F200C6D82E1FD77100EB31FD /* MyMovieTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyMovieTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +42,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F200C6F42E1FD8A900EB31FD /* Alamofire in Frameworks */,
+				F200C6F82E1FD93700EB31FD /* SnapKit in Frameworks */,
+				F200C6FA2E1FD93A00EB31FD /* Swinject in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,6 +55,7 @@
 			isa = PBXGroup;
 			children = (
 				F200C6DA2E1FD77100EB31FD /* MyMovieTest */,
+				F200C6F22E1FD8A900EB31FD /* Frameworks */,
 				F200C6D92E1FD77100EB31FD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -56,6 +66,13 @@
 				F200C6D82E1FD77100EB31FD /* MyMovieTest.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		F200C6F22E1FD8A900EB31FD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -78,6 +95,9 @@
 			);
 			name = MyMovieTest;
 			packageProductDependencies = (
+				F200C6F32E1FD8A900EB31FD /* Alamofire */,
+				F200C6F72E1FD93700EB31FD /* SnapKit */,
+				F200C6F92E1FD93A00EB31FD /* Swinject */,
 			);
 			productName = MyMovieTest;
 			productReference = F200C6D82E1FD77100EB31FD /* MyMovieTest.app */;
@@ -107,6 +127,11 @@
 			);
 			mainGroup = F200C6CF2E1FD77000EB31FD;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				F200C6F12E1FD88D00EB31FD /* XCRemoteSwiftPackageReference "Alamofire" */,
+				F200C6F52E1FD8CA00EB31FD /* XCRemoteSwiftPackageReference "SnapKit" */,
+				F200C6F62E1FD90F00EB31FD /* XCRemoteSwiftPackageReference "Swinject" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F200C6D92E1FD77100EB31FD /* Products */;
 			projectDirPath = "";
@@ -147,9 +172,9 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyMovieTest/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -174,9 +199,9 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyMovieTest/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -333,6 +358,51 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F200C6F12E1FD88D00EB31FD /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire/";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
+		F200C6F52E1FD8CA00EB31FD /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+		F200C6F62E1FD90F00EB31FD /* XCRemoteSwiftPackageReference "Swinject" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Swinject/Swinject.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.9.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F200C6F32E1FD8A900EB31FD /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F200C6F12E1FD88D00EB31FD /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		F200C6F72E1FD93700EB31FD /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F200C6F52E1FD8CA00EB31FD /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		F200C6F92E1FD93A00EB31FD /* Swinject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F200C6F62E1FD90F00EB31FD /* XCRemoteSwiftPackageReference "Swinject" */;
+			productName = Swinject;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F200C6D02E1FD77000EB31FD /* Project object */;
 }
