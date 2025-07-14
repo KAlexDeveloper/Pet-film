@@ -9,78 +9,12 @@
 import UIKit
 import SnapKit
 
-//final class MovieCell: UICollectionViewCell {
-//    private let posterImageView = UIImageView()
-//    private let titleLabel = UILabel()
-//
-//    private var currentImageURL: URL?
-//
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        contentView.backgroundColor = .systemGray6
-//        contentView.layer.cornerRadius = 10
-//        contentView.layer.masksToBounds = true
-//
-//        contentView.addSubview(posterImageView)
-//        contentView.addSubview(titleLabel)
-//
-//        posterImageView.contentMode = .scaleAspectFill
-//        posterImageView.clipsToBounds = true
-//
-//        posterImageView.snp.makeConstraints { make in
-//            make.top.leading.trailing.equalToSuperview()
-//            make.height.equalTo(400)
-//        }
-//
-//        titleLabel.font = .systemFont(ofSize: 18, weight: .semibold)
-//        titleLabel.numberOfLines = 2
-//        titleLabel.textAlignment = .center
-//
-//        titleLabel.snp.makeConstraints { make in
-//            make.top.equalTo(posterImageView.snp.bottom).offset(4)
-//            make.leading.trailing.bottom.equalToSuperview().inset(4)
-//        }
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError()
-//    }
-//
-//    override func prepareForReuse() {
-//        super.prepareForReuse()
-//        posterImageView.image = UIImage(systemName: "film")
-//        currentImageURL = nil
-//    }
-//
-//    func configure(with movie: Movie) {
-//        titleLabel.text = movie.title
-//
-//        if let posterUrl = movie.posterUrl, let url = URL(string: posterUrl) {
-//            currentImageURL = url
-//            posterImageView.image = UIImage(systemName: "film")
-//
-//            // Загружаем изображение асинхронно
-//            URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
-//                guard let self = self,
-//                      let data = data,
-//                      let image = UIImage(data: data),
-//                      self.currentImageURL == url else { return }
-//
-//                DispatchQueue.main.async {
-//                    self.posterImageView.image = image
-//                }
-//            }.resume()
-//        } else {
-//            posterImageView.image = UIImage(systemName: "film")
-//        }
-//    }
-//}
 final class MovieCell: UICollectionViewCell {
     private let posterImageView = UIImageView()
     private let titleLabel = UILabel()
+    private let yearCountryLabel = UILabel()
+    private let ratingLabel = UILabel()
     private let overviewLabel = UILabel()
-    private let releaseDateLabel = UILabel()
-    private let smallPosterImageView = UIImageView()
 
     private var currentImageURL: URL?
 
@@ -90,52 +24,59 @@ final class MovieCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 10
         contentView.layer.masksToBounds = true
 
-        // Настройка smallPosterImageView (100x50)
-        smallPosterImageView.contentMode = .scaleAspectFill
-        smallPosterImageView.clipsToBounds = true
-        contentView.addSubview(smallPosterImageView)
+        posterImageView.contentMode = .scaleAspectFill
+        posterImageView.clipsToBounds = true
+        posterImageView.layer.cornerRadius = 10 // Скругляем, чтобы совпадало с ячейкой
+        posterImageView.backgroundColor = .systemGray5 // Задаём фон заглушки
+        posterImageView.image = UIImage(systemName: "photo") // Начальная заглушка
+        posterImageView.tintColor = .lightGray
+        contentView.addSubview(posterImageView)
 
-        // Настройка titleLabel
         titleLabel.font = .systemFont(ofSize: 18, weight: .semibold)
-        titleLabel.numberOfLines = 2
+        titleLabel.numberOfLines = 0
         titleLabel.textAlignment = .left
         contentView.addSubview(titleLabel)
 
-        // Настройка overviewLabel
+        yearCountryLabel.font = .systemFont(ofSize: 14, weight: .medium)
+        yearCountryLabel.numberOfLines = 0
+        yearCountryLabel.textAlignment = .left
+        contentView.addSubview(yearCountryLabel)
+
+        ratingLabel.font = .systemFont(ofSize: 14, weight: .medium)
+        ratingLabel.numberOfLines = 0
+        ratingLabel.textAlignment = .left
+        contentView.addSubview(ratingLabel)
+
         overviewLabel.font = .systemFont(ofSize: 14, weight: .regular)
-        overviewLabel.numberOfLines = 3
+        overviewLabel.numberOfLines = 0
         overviewLabel.textAlignment = .left
         contentView.addSubview(overviewLabel)
 
-        // Настройка releaseDateLabel
-        releaseDateLabel.font = .systemFont(ofSize: 14, weight: .medium)
-        releaseDateLabel.textAlignment = .left
-        contentView.addSubview(releaseDateLabel)
-
         // Auto Layout
-        smallPosterImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(8)
-            make.trailing.equalToSuperview().offset(-8)
-            make.width.equalTo(100)
-            make.height.equalTo(50)
+        posterImageView.snp.makeConstraints { make in
+            make.top.leading.bottom.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(2.0 / 5.0)
         }
 
         titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(8)
-            make.leading.equalToSuperview().offset(8)
-            make.trailing.equalTo(smallPosterImageView.snp.leading).offset(-8)
+            make.leading.equalTo(posterImageView.snp.trailing).offset(8)
+            make.trailing.equalToSuperview().offset(-8)
         }
 
-        releaseDateLabel.snp.makeConstraints { make in
+        yearCountryLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(4)
-            make.leading.equalToSuperview().offset(8)
-            make.trailing.equalToSuperview().offset(-8)
+            make.leading.trailing.equalTo(titleLabel)
+        }
+
+        ratingLabel.snp.makeConstraints { make in
+            make.top.equalTo(yearCountryLabel.snp.bottom).offset(4)
+            make.leading.trailing.equalTo(titleLabel)
         }
 
         overviewLabel.snp.makeConstraints { make in
-            make.top.equalTo(releaseDateLabel.snp.bottom).offset(4)
-            make.leading.equalToSuperview().offset(8)
-            make.trailing.equalToSuperview().offset(-8)
+            make.top.equalTo(ratingLabel.snp.bottom).offset(4)
+            make.leading.trailing.equalTo(titleLabel)
             make.bottom.equalToSuperview().offset(-8)
         }
     }
@@ -146,36 +87,48 @@ final class MovieCell: UICollectionViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        posterImageView.image = nil
-        smallPosterImageView.image = nil
+        posterImageView.image = UIImage(systemName: "photo")
+        posterImageView.tintColor = .lightGray
+        posterImageView.contentMode = .scaleAspectFit
+        posterImageView.backgroundColor = .systemGray5
         titleLabel.text = nil
+        yearCountryLabel.text = nil
+        ratingLabel.text = nil
         overviewLabel.text = nil
-        releaseDateLabel.text = nil
         currentImageURL = nil
     }
 
     func configure(with movie: Movie) {
         titleLabel.text = movie.title
-        overviewLabel.text = movie.overview
-        releaseDateLabel.text = movie.releaseDate
+
+        let country = movie.countries?.first?.name ?? "Страна неизвестна"
+        yearCountryLabel.text = "\(movie.releaseDate), \(country)"
+
+        let imdbRating = movie.rating?.imdb ?? 0.0
+        let kpRating = movie.rating?.kp ?? 0.0
+        let averageRating = imdbRating > 0 ? imdbRating : kpRating > 0 ? kpRating : 0.0
+        ratingLabel.text = averageRating > 0 ? "Оценка: \(String(format: "%.1f", averageRating))" : "Оценка отсутствует"
+
+        // Гарантируем отображение текста
+        overviewLabel.text = movie.description?.isEmpty == false ? movie.description! : "Описание отсутствует"
+
+        posterImageView.image = UIImage(systemName: "photo")
+        posterImageView.contentMode = .scaleAspectFit
+        posterImageView.tintColor = .lightGray
+        posterImageView.backgroundColor = .systemGray5
 
         if let posterUrl = movie.posterUrl, let url = URL(string: posterUrl) {
             currentImageURL = url
-            smallPosterImageView.image = UIImage(systemName: "film")
-
-            // Загружаем изображение асинхронно
             URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
                 guard let self = self,
                       let data = data,
                       let image = UIImage(data: data),
                       self.currentImageURL == url else { return }
-
                 DispatchQueue.main.async {
-                    self.smallPosterImageView.image = image
+                    self.posterImageView.image = image
+                    self.posterImageView.contentMode = .scaleAspectFill
                 }
             }.resume()
-        } else {
-            smallPosterImageView.image = UIImage(systemName: "film")
         }
     }
 }

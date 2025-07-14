@@ -9,15 +9,25 @@ import Foundation
 
 struct KinopoiskMovieResponse: Decodable {
     let docs: [Movie]
+    let total: Int
+    let limit: Int
+    let page: Int
+    let pages: Int
 }
 
 struct Movie: Decodable {
     let id: Int
     let name: String
+    let alternativeName: String?
     let description: String?
     let year: Int?
     let poster: Poster?
-
+    let rating: Rating?
+    let votes: Votes?
+    let genres: [Genre]?
+    let countries: [Country]?
+    let externalId: ExternalID?
+    
     var title: String { name }
     var overview: String { description ?? "Описание отсутствует" }
     var releaseDate: String {
@@ -32,45 +42,35 @@ struct Movie: Decodable {
 
 struct Poster: Decodable {
     let url: String?
+    let previewUrl: String?
 }
-//struct KinopoiskMovieResponse: Decodable {
-//    let docs: [Movie]
-//}
-//
-//struct Movie: Decodable {
-//    let id: Int
-//    let name: String
-//    let description: String?
-//    let year: Int?
-//    let poster: Poster?
-//
-//    var title: String { name }
-//    var overview: String { description ?? "Описание отсутствует" }
-//    var releaseDate: String { year != nil ? String(year!) : "Год неизвестен" }
-//    var posterUrl: String? { poster?.url }
-//}
-//
-//struct Poster: Decodable {
-//    let url: String
-//}
-//
-//struct Movie: Decodable {
-//    let id: Int
-//    let name: String
-//    let description: String?
-//    let year: Int?
-//    let poster: Poster?
-//    
-//    var title: String { name }
-//    var overview: String { description ?? "Описание отсутствует" }
-//    var releaseDate: String { year != nil ? String(year!) : "Год неизвестен" }
-//    var posterUrl: String? { poster?.url }
-//}
-//
-//struct Poster: Decodable {
-//    let url: String
-//}
-//
-//struct KinopoiskMovieResponse: Decodable {
-//    let docs: [Movie]
-//}
+
+struct Rating: Decodable {
+    let kp: Double?
+    let imdb: Double?
+    let filmCritics: Double?
+    let russianFilmCritics: Double?
+    let await: Double?
+}
+
+struct Votes: Decodable {
+    let kp: Int?
+    let imdb: Int?
+    let filmCritics: Int?
+    let russianFilmCritics: Int?
+    let await: Int?
+}
+
+struct Genre: Decodable {
+    let name: String
+}
+
+struct Country: Decodable {
+    let name: String
+}
+
+struct ExternalID: Decodable {
+    let kpHD: String?
+    let imdb: String?
+    let tmdb: Int?
+}

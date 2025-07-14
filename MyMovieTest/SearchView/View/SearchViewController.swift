@@ -120,10 +120,10 @@ final class SearchViewController: UIViewController {
         labelName.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(1)
             make.leading.trailing.equalToSuperview().inset(16)
-            make.height.equalTo(60)
+            make.height.equalTo(40)
         }
         searchBackgroundView.snp.makeConstraints { make in
-            make.top.equalTo(labelName.snp.bottom).offset(10)
+            make.top.equalTo(labelName.snp.bottom).offset(1)
             make.leading.trailing.equalToSuperview().inset(16)
             make.height.equalTo(60)
         }
@@ -228,7 +228,6 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
         presenter.didSelectMovie(movie)
     }
 }
-
 extension SearchViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let padding: CGFloat = 10 * 2
