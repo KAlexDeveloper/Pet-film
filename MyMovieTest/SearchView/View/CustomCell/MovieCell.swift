@@ -15,8 +15,18 @@ final class MovieCell: UICollectionViewCell {
     private let yearCountryLabel = UILabel()
     private let ratingLabel = UILabel()
     private let overviewLabel = UILabel()
+    private let favoriteButton = UIButton(type: .system)
     
     private var currentImageURL: URL?
+    private var isFavorite: Bool = false {
+        didSet {
+            let imageName = isFavorite ? "heart.fill" : "heart"
+            favoriteButton.setImage(UIImage(systemName: imageName), for: .normal)
+            favoriteButton.tintColor = isFavorite ? .myPinkSecond : .lightGray
+        }
+    }
+    
+    static let imageCache = NSCache<NSURL, UIImage>()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -24,7 +34,6 @@ final class MovieCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 10
         contentView.layer.masksToBounds = true
         
-        // Poster
         posterImageView.contentMode = .scaleAspectFit
         posterImageView.clipsToBounds = true
         posterImageView.layer.cornerRadius = 10
@@ -33,33 +42,30 @@ final class MovieCell: UICollectionViewCell {
         posterImageView.tintColor = .lightGray
         contentView.addSubview(posterImageView)
         
-        // Title
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(yearCountryLabel)
+        contentView.addSubview(ratingLabel)
+        contentView.addSubview(overviewLabel)
+        contentView.addSubview(favoriteButton)
+        
         titleLabel.font = .systemFont(ofSize: 18, weight: .semibold)
         titleLabel.numberOfLines = 0
         titleLabel.textAlignment = .left
-        contentView.addSubview(titleLabel)
         
-        // Year & Country
         yearCountryLabel.font = .systemFont(ofSize: 14, weight: .medium)
         yearCountryLabel.numberOfLines = 0
         yearCountryLabel.textAlignment = .left
-        contentView.addSubview(yearCountryLabel)
         
-        // Rating
         ratingLabel.font = .systemFont(ofSize: 14, weight: .medium)
         ratingLabel.numberOfLines = 0
         ratingLabel.textAlignment = .left
-        contentView.addSubview(ratingLabel)
         
-        // Overview
         overviewLabel.font = .systemFont(ofSize: 14, weight: .regular)
         overviewLabel.numberOfLines = 0
         overviewLabel.textAlignment = .left
         overviewLabel.setContentHuggingPriority(.defaultLow, for: .vertical)
         overviewLabel.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
-        contentView.addSubview(overviewLabel)
         
-        // Layout
         posterImageView.snp.makeConstraints { make in
             make.top.leading.equalToSuperview()
             make.bottom.equalToSuperview()
@@ -88,11 +94,13 @@ final class MovieCell: UICollectionViewCell {
             make.bottom.equalToSuperview().offset(-8)
         }
         
-        // Выравнивание и приоритеты
-        titleLabel.textAlignment = .left
-        yearCountryLabel.textAlignment = .left
-        ratingLabel.textAlignment = .left
-        overviewLabel.textAlignment = .left
+        favoriteButton.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(8)
+            make.trailing.equalToSuperview().offset(-8)
+            make.width.height.equalTo(24)
+        }
+        
+        favoriteButton.addTarget(self, action: #selector(favoriteTapped), for: .touchUpInside)
         
         titleLabel.setContentHuggingPriority(.required, for: .vertical)
         yearCountryLabel.setContentHuggingPriority(.required, for: .vertical)
@@ -115,15 +123,16 @@ final class MovieCell: UICollectionViewCell {
         overviewLabel.text = nil
         overviewLabel.isHidden = false
         currentImageURL = nil
+        isFavorite = false
         
-        // Сброс размеров
         titleLabel.sizeToFit()
         yearCountryLabel.sizeToFit()
         ratingLabel.sizeToFit()
         overviewLabel.sizeToFit()
     }
     
-    func configure(with movie: Movie) {
+    func configure(with movie: Movie, isFavorite: Bool = false) {
+        self.isFavorite = isFavorite
         titleLabel.text = movie.title
         titleLabel.sizeToFit()
         
@@ -152,11 +161,22 @@ final class MovieCell: UICollectionViewCell {
         
         if let posterUrl = movie.posterUrl, let url = URL(string: posterUrl) {
             currentImageURL = url
+            
+            if let cachedImage = MovieCell.imageCache.object(forKey: url as NSURL) {
+                posterImageView.image = cachedImage
+                posterImageView.contentMode = .scaleAspectFill
+                posterImageView.layer.cornerRadius = 10
+                return
+            }
+            
             URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
                 guard let self = self,
                       let data = data,
                       let image = UIImage(data: data),
                       self.currentImageURL == url else { return }
+                
+                MovieCell.imageCache.setObject(image, forKey: url as NSURL)
+                
                 DispatchQueue.main.async {
                     self.posterImageView.image = image
                     self.posterImageView.contentMode = .scaleAspectFill
@@ -168,5 +188,10 @@ final class MovieCell: UICollectionViewCell {
         }
         contentView.setNeedsLayout()
         contentView.layoutIfNeeded()
+    }
+    
+    @objc private func favoriteTapped() {
+        isFavorite.toggle()
+        // 💬 В будущем сюда добавим логику сохранения в хранилище.
     }
 }
