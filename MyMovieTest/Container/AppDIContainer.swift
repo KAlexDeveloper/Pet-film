@@ -17,6 +17,19 @@ final class AppDIContainer {
         container = Container()
         registerDependencies()
     }
+//    private func registerDependencies() {
+//        // Search-модуль
+//        container.register(MovieServiceProtocol.self) { _ in MovieService() }
+//        container.register(SearchInteractorProtocol.self) { r in
+//            let service = r.resolve(MovieServiceProtocol.self)!
+//            return SearchInteractor(service: service)
+//        }
+//        container.register(SearchRouterProtocol.self) { _ in SearchRouter() }
+//
+//        // Favorites-модуль
+//        container.register(FavoritesRouterProtocol.self) { _ in FavoritesRouter() }
+//        container.register(FavoritesInteractorProtocol.self) { _ in FavoritesInteractor() }
+//    }
     
     private func registerDependencies() {
         // ✅ Регистрация сервиса
@@ -36,5 +49,10 @@ final class AppDIContainer {
         }
         // ❌ Не регистрируем Presenter
         // Мы собираем его вручную в билдере, чтобы избежать проблем с циклическими зависимостями
+        
+        
+        // Favorites-модуль
+        container.register(FavoritesRouterProtocol.self) { _ in FavoritesRouter() }
+        container.register(FavoritesInteractorProtocol.self) { _ in FavoritesInteractor() }
     }
 }

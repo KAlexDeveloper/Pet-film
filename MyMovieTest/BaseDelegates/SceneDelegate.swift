@@ -10,30 +10,37 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        let window = UIWindow(windowScene: windowScene)
+        window.rootViewController = MainTabBarController()
+        self.window = window
+        window.makeKeyAndVisible()
+    }
 
 
-    func scene(_ scene: UIScene,
-                   willConnectTo session: UISceneSession,
-                   options connectionOptions: UIScene.ConnectionOptions) {
-            
-            guard let windowScene = (scene as? UIWindowScene) else { return }
-
-            // Создаем окно
-            let window = UIWindow(windowScene: windowScene)
-            
-            // Собираем SearchViewController
-            let searchVC = SearchBuilder.build()
-            
-            // Оборачиваем в UINavigationController
-            let navController = UINavigationController(rootViewController: searchVC)
-            
-            // Настраиваем окно
-            window.rootViewController = navController
-            window.makeKeyAndVisible()
-            
-            // Сохраняем ссылку
-            self.window = window
-        }
+//    func scene(_ scene: UIScene,
+//                   willConnectTo session: UISceneSession,
+//                   options connectionOptions: UIScene.ConnectionOptions) {
+//            
+//            guard let windowScene = (scene as? UIWindowScene) else { return }
+//
+//            // Создаем окно
+//            let window = UIWindow(windowScene: windowScene)
+//            
+//            // Собираем SearchViewController
+//            let searchVC = SearchBuilder.build()
+//            
+//            // Оборачиваем в UINavigationController
+//            let navController = UINavigationController(rootViewController: searchVC)
+//            
+//            // Настраиваем окно
+//            window.rootViewController = navController
+//            window.makeKeyAndVisible()
+//            
+//            // Сохраняем ссылку
+//            self.window = window
+//        }
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
