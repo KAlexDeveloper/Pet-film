@@ -203,6 +203,7 @@ extension SearchViewController: SearchViewProtocol {
     
     func showLoading() {
         activityIndicator.startAnimating()
+        activityIndicator.color = .myPinkSecond
     }
     
     func hideLoading() {
@@ -215,13 +216,23 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
         movies.count
     }
     
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCell", for: indexPath) as! MovieCell
+//        let movie = movies[indexPath.item]
+//        cell.configure(with: movie)
+//        return cell
+//    }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCell", for: indexPath) as! MovieCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCell", for: indexPath) as? MovieCell else {
+            return UICollectionViewCell()
+        }
         let movie = movies[indexPath.item]
-        cell.configure(with: movie)
+        let isFavorite = presenter?.isFavorite(id: movie.id) ?? false
+        cell.configure(with: movie, isFavorite: isFavorite)
+        cell.delegate = self
         return cell
     }
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let movie = movies[indexPath.item]
         presenter.didSelectMovie(movie)
@@ -233,5 +244,12 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout {
         let width = collectionView.frame.width - padding
         let height: CGFloat = 200
         return CGSize(width: width, height: height)
+    }
+}
+
+extension SearchViewController: MovieCellDelegate {
+    func didTapFavorite(for movie: Movie) {
+        presenter?.toggleFavorite(movie: movie)
+        collectionView.reloadData()
     }
 }

@@ -17,32 +17,17 @@ final class AppDIContainer {
         container = Container()
         registerDependencies()
     }
-//    private func registerDependencies() {
-//        // Search-модуль
-//        container.register(MovieServiceProtocol.self) { _ in MovieService() }
-//        container.register(SearchInteractorProtocol.self) { r in
-//            let service = r.resolve(MovieServiceProtocol.self)!
-//            return SearchInteractor(service: service)
-//        }
-//        container.register(SearchRouterProtocol.self) { _ in SearchRouter() }
-//
-//        // Favorites-модуль
-//        container.register(FavoritesRouterProtocol.self) { _ in FavoritesRouter() }
-//        container.register(FavoritesInteractorProtocol.self) { _ in FavoritesInteractor() }
-//    }
     
     private func registerDependencies() {
         // ✅ Регистрация сервиса
         container.register(MovieServiceProtocol.self) { _ in
             MovieService()
         }
-        
         // ✅ Регистрация интерактора
         container.register(SearchInteractorProtocol.self) { resolver in
             let service = resolver.resolve(MovieServiceProtocol.self)!
             return SearchInteractor(service: service)
         }
-        
         // ✅ Регистрация роутера
         container.register(SearchRouterProtocol.self) { _ in
             SearchRouter()
@@ -50,9 +35,23 @@ final class AppDIContainer {
         // ❌ Не регистрируем Presenter
         // Мы собираем его вручную в билдере, чтобы избежать проблем с циклическими зависимостями
         
-        
         // Favorites-модуль
         container.register(FavoritesRouterProtocol.self) { _ in FavoritesRouter() }
-        container.register(FavoritesInteractorProtocol.self) { _ in FavoritesInteractor() }
+        container.register(FavoritesInteractorProtocol.self) { resolver in
+            let storage = resolver.resolve(FavoriteMovieStoring.self)!
+            return FavoritesInteractor(storage: storage)
+        }
+        //CoreData
+        container.register(FavoriteMovieStoring.self) { _ in CoreDataService() }
     }
 }
+//extension AppDIContainer {
+//    func registerFavoritesModule() {
+//        container.register(FavoritesRouterProtocol.self) { _ in FavoritesRouter() }
+//
+//        container.register(FavoritesInteractorProtocol.self) { resolver in
+//            let storage = resolver.resolve(FavoriteMovieStoring.self)!
+//            return FavoritesInteractor(storage: storage)
+//        }
+//    }
+//}
