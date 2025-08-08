@@ -144,8 +144,6 @@ final class FavoriteMovieCell: UICollectionViewCell {
     func configure(with movie: FavoriteMovieEntity) {
         titleLabel.text = movie.title
         if let url = URL(string: movie.posterUrl ?? "") {
-            // Можно подключить Kingfisher здесь, если разрешено
-            // imageView.kf.setImage(with: url)
             DispatchQueue.global().async {
                 if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
                     DispatchQueue.main.async {
@@ -158,3 +156,121 @@ final class FavoriteMovieCell: UICollectionViewCell {
         }
     }
 }
+//import UIKit
+//import SnapKit
+//
+//protocol FavoritesViewProtocol: AnyObject {
+//    func show(favorites: [FavoriteMovieEntity])
+//    func showEmptyMessage()
+//}
+//
+//final class FavoritesViewController: UIViewController {
+//    
+//    var presenter: FavoritesPresenterProtocol!
+//    private var favorites: [Movie] = []
+//
+//    private lazy var collectionView: UICollectionView = {
+//        let layout = UICollectionViewFlowLayout()
+//        layout.scrollDirection = .vertical
+//        layout.itemSize = CGSize(width: view.frame.width * 0.95, height: 200)
+//        layout.sectionInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+//        layout.minimumLineSpacing = 10
+//
+//        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+//        cv.dataSource = self
+//        cv.delegate = self
+//        cv.register(MovieCell.self, forCellWithReuseIdentifier: "MovieCell")
+//        cv.backgroundColor = .white
+//        return cv
+//    }()
+//
+//    private let emptyLabel: UILabel = {
+//        let label = UILabel()
+//        label.text = "Избранное пусто"
+//        label.textAlignment = .center
+//        label.font = .systemFont(ofSize: 18, weight: .medium)
+//        label.textColor = .gray
+//        label.isHidden = true
+//        return label
+//    }()
+//
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//        title = "Избранное"
+//        view.backgroundColor = .white
+//        setupUI()
+//        presenter.viewDidLoad()
+//    }
+//
+//    private func setupUI() {
+//        view.addSubview(collectionView)
+//        view.addSubview(emptyLabel)
+//
+//        collectionView.snp.makeConstraints { make in
+//            make.edges.equalToSuperview()
+//        }
+//
+//        emptyLabel.snp.makeConstraints { make in
+//            make.center.equalToSuperview()
+//        }
+//    }
+//}
+//
+//// MARK: - FavoritesViewProtocol
+//
+//extension FavoritesViewController: FavoritesViewProtocol {
+//    func show(favorites: [FavoriteMovieEntity]) {
+//        self.favorites = favorites.map { FavoriteMovieMapper.toMovie(from: $0) }
+//        collectionView.isHidden = false
+//        emptyLabel.isHidden = true
+//        collectionView.reloadData()
+//    }
+//
+//    func showEmptyMessage() {
+//        self.favorites = []
+//        collectionView.isHidden = true
+//        emptyLabel.isHidden = false
+//    }
+//}
+//
+//// MARK: - UICollectionView
+//
+//extension FavoritesViewController: UICollectionViewDataSource, UICollectionViewDelegate, MovieCellDelegate {
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        favorites.count
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCell", for: indexPath) as? MovieCell else {
+//            return UICollectionViewCell()
+//        }
+//
+//        let movie = favorites[indexPath.item]
+//        cell.configure(with: movie, isFavorite: true)
+//        cell.delegate = self
+//        return cell
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        let movie = favorites[indexPath.item]
+//        presenter.didSelectMovie(movie)
+//    }
+//
+//    func didTapFavorite(for movie: Movie) {
+//        presenter.toggleFavorite(movie: movie)
+//    }
+//}
+//
+//enum FavoriteMovieMapper {
+//    static func toMovie(from entity: FavoriteMovieEntity) -> Movie {
+//        return Movie(
+//            id: Int(entity.id),
+//            title: entity.title ?? "",
+//            description: entity.overview,
+//            releaseDate: entity.releaseDate ?? "",
+//            posterUrl: entity.posterUrl,
+//            countries: [Country(name: entity.country ?? "")],
+//            rating: Rating(kp: entity.kpRating, imdb: entity.imdbRating)
+//        )
+//    }
+//}

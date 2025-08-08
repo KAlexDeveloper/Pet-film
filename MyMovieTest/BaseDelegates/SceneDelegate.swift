@@ -16,6 +16,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.rootViewController = MainTabBarController()
         self.window = window
         window.makeKeyAndVisible()
+        
+        do {
+            let key = "kinopoiskApiKey"
+            let keychain = KeychainManager.shared
+
+            if (try? keychain.getToken(for: key)) == nil {
+                try keychain.saveToken("FMQ970S-76N461V-GYGMDYK-TSQT6ZQ", for: key)
+                print("✅ Токен сохранён")
+            } else {
+                print("🔑 Токен уже есть")
+            }
+        } catch {
+            print("❌ Ошибка при работе с токеном: \(error.localizedDescription)")
+        }
     }
 
 
