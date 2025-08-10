@@ -16,10 +16,6 @@ protocol MovieServiceProtocol {
 final class MovieService: MovieServiceProtocol {
     private let tokenKey = "kinopoiskApiKey"
     
-    /// Выполняет поиск фильмов по запросу через API Кинопоиска.
-    /// - Parameter query: Поисковый запрос (например, название фильма).
-    /// - Returns: Массив объектов `Movie`, представляющих результаты поиска.
-    /// - Throws: Ошибка, если не удалось получить API-ключ, выполнить запрос или декодировать ответ.
     func searchMovies(query: String) async throws -> [Movie] {
         // Получение API-ключа из Keychain
         let apiKey: String
@@ -41,12 +37,12 @@ final class MovieService: MovieServiceProtocol {
         
         // Обработка результата
         switch dataResponse.result {
+            
         case .success(let data):
             // Логирование JSON-ответа для отладки
             if let jsonString = String(data: data, encoding: .utf8) {
                 print("🔥 JSON-ответ сервера:\n\(jsonString)")
             }
-            
             // Декодирование ответа
             do {
                 let movieResponse = try JSONDecoder().decode(KinopoiskMovieResponse.self, from: data)

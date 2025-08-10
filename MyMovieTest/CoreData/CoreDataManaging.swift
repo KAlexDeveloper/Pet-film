@@ -5,7 +5,6 @@
 //  Created by сонный on 17.07.2025.
 //
 
-
 import CoreData
 
 protocol CoreDataManaging {
@@ -15,7 +14,7 @@ protocol CoreDataManaging {
 
 final class CoreDataManager: CoreDataManaging {
     static let shared = CoreDataManager()
-
+    
     private init() {
         persistentContainer = NSPersistentContainer(name: "FavoriteMovieEntity") // Имя .xcdatamodeld
         persistentContainer.loadPersistentStores { _, error in
@@ -24,10 +23,10 @@ final class CoreDataManager: CoreDataManaging {
             }
         }
     }
-
+    
     private let persistentContainer: NSPersistentContainer
     var context: NSManagedObjectContext { persistentContainer.viewContext }
-
+    
     func saveContext() {
         guard context.hasChanges else { return }
         do {

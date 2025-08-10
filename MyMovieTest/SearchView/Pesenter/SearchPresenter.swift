@@ -7,10 +7,6 @@
 
 import Foundation
 
-//protocol SearchPresenterProtocol: AnyObject {
-//    func searchButtonTapped(with query: String)
-//    func didSelectMovie(_ movie: Movie)
-//}
 protocol SearchPresenterProtocol: AnyObject {
     func searchButtonTapped(with query: String)
     func didSelectMovie(_ movie: Movie)
@@ -45,16 +41,16 @@ extension SearchPresenter: SearchPresenterProtocol {
         router.openDetail(for: movie)
     }
     func toggleFavorite(movie: Movie) {
-            if favoriteService.isFavorite(id: movie.id) {
-                favoriteService.delete(by: movie.id)
-            } else {
-                favoriteService.save(movie: movie)
-            }
+        if favoriteService.isFavorite(id: movie.id) {
+            favoriteService.delete(by: movie.id)
+        } else {
+            favoriteService.save(movie: movie)
         }
-
-        func isFavorite(id: Int) -> Bool {
-            favoriteService.isFavorite(id: id)
-        }
+    }
+    
+    func isFavorite(id: Int) -> Bool {
+        favoriteService.isFavorite(id: id)
+    }
 }
 
 extension SearchPresenter: SearchInteractorOutputProtocol {
@@ -63,7 +59,7 @@ extension SearchPresenter: SearchInteractorOutputProtocol {
         view?.hideLoading()
         view?.showMovies(movies)
     }
-
+    
     func didFailToReceiveMovies(_ error: Error) {
         print("Presenter: ошибка \(error.localizedDescription), скрываем loader")
         view?.hideLoading()

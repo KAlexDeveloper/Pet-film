@@ -16,19 +16,19 @@ protocol FavoriteMovieStoring {
 
 final class CoreDataService: FavoriteMovieStoring {
     private let context: NSManagedObjectContext
-
+    
     init(context: NSManagedObjectContext = CoreDataManager.shared.context) {
         self.context = context
     }
-
+    
     func fetchAll() -> [FavoriteMovieEntity] {
         let request: NSFetchRequest<FavoriteMovieEntity> = FavoriteMovieEntity.fetchRequest()
         return (try? context.fetch(request)) ?? []
     }
-
+    
     func save(movie: Movie) {
         guard !isFavorite(id: movie.id) else { return }
-
+        
         let entity = FavoriteMovieEntity(context: context)
         entity.id = Int64(movie.id)
         entity.title = movie.title ?? ""
@@ -37,7 +37,7 @@ final class CoreDataService: FavoriteMovieStoring {
         entity.rating = movie.rating?.kp ?? 0.0
         CoreDataManager.shared.saveContext()
     }
-
+    
     func delete(by id: Int) {
         let request: NSFetchRequest<FavoriteMovieEntity> = FavoriteMovieEntity.fetchRequest()
         request.predicate = NSPredicate(format: "id == %d", id)
@@ -46,7 +46,7 @@ final class CoreDataService: FavoriteMovieStoring {
             CoreDataManager.shared.saveContext()
         }
     }
-
+    
     func isFavorite(id: Int) -> Bool {
         let request: NSFetchRequest<FavoriteMovieEntity> = FavoriteMovieEntity.fetchRequest()
         request.predicate = NSPredicate(format: "id == %d", id)

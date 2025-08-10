@@ -216,13 +216,6 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
         movies.count
     }
     
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCell", for: indexPath) as! MovieCell
-//        let movie = movies[indexPath.item]
-//        cell.configure(with: movie)
-//        return cell
-//    }
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCell", for: indexPath) as? MovieCell else {
             return UICollectionViewCell()

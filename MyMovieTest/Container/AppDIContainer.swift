@@ -5,7 +5,6 @@
 //  Created by сонный on 10.07.2025.
 //
 
-
 import Swinject
 
 final class AppDIContainer {
@@ -23,35 +22,29 @@ final class AppDIContainer {
         container.register(MovieServiceProtocol.self) { _ in
             MovieService()
         }
-        // ✅ Регистрация интерактора
+        
+        // ✅ Регистрация интерактора Search
         container.register(SearchInteractorProtocol.self) { resolver in
             let service = resolver.resolve(MovieServiceProtocol.self)!
             return SearchInteractor(service: service)
         }
-        // ✅ Регистрация роутера
+        
+        // ✅ Регистрация роутера Search
         container.register(SearchRouterProtocol.self) { _ in
             SearchRouter()
         }
-        // ❌ Не регистрируем Presenter
-        // Мы собираем его вручную в билдере, чтобы избежать проблем с циклическими зависимостями
         
-        // Favorites-модуль
-        container.register(FavoritesRouterProtocol.self) { _ in FavoritesRouter() }
+        // ✅ CoreData
+        container.register(FavoriteMovieStoring.self) { _ in CoreDataService() }
+        
+        // ✅ Favorites-модуль
+        container.register(FavoritesRouterProtocol.self) { _ in
+            FavoritesRouter()
+        }
+        
         container.register(FavoritesInteractorProtocol.self) { resolver in
             let storage = resolver.resolve(FavoriteMovieStoring.self)!
             return FavoritesInteractor(storage: storage)
         }
-        //CoreData
-        container.register(FavoriteMovieStoring.self) { _ in CoreDataService() }
     }
 }
-//extension AppDIContainer {
-//    func registerFavoritesModule() {
-//        container.register(FavoritesRouterProtocol.self) { _ in FavoritesRouter() }
-//
-//        container.register(FavoritesInteractorProtocol.self) { resolver in
-//            let storage = resolver.resolve(FavoriteMovieStoring.self)!
-//            return FavoritesInteractor(storage: storage)
-//        }
-//    }
-//}

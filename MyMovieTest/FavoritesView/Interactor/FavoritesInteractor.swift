@@ -4,30 +4,44 @@
 //
 //  Created by сонный on 17.07.2025.
 //
+import Foundation
 
-
-// MARK: - Interactor Protocol
-protocol FavoritesInteractorProtocol: AnyObject {
-    func fetchFavorites()
-}
-
-// MARK: - Interactor Output Protocol
 protocol FavoritesInteractorOutputProtocol: AnyObject {
     func didLoadFavorites(_ movies: [FavoriteMovieEntity])
+}
+
+protocol FavoritesInteractorProtocol: AnyObject {
+    var output: FavoritesInteractorOutputProtocol? { get set }
+    func fetchFavorites()
+    func toggleFavorite(movie: Movie)
 }
 
 final class FavoritesInteractor: FavoritesInteractorProtocol {
     weak var output: FavoritesInteractorOutputProtocol?
     private let storage: FavoriteMovieStoring
-
+    
     init(storage: FavoriteMovieStoring) {
         self.storage = storage
     }
-
+    
     func fetchFavorites() {
+        // Получаем из хранилища (Core Data)
         let items = storage.fetchAll()
-        output?.didLoadFavorites(items)
+        // Возвращаем результат в main thread
+        DispatchQueue.main.async { [weak self] in
+            self?.output?.didLoadFavorites(items)
+        }
+    }
+    
+    func toggleFavorite(movie: Movie) {
+        // Если уже в избранном — удаляем, иначе сохраняем
+        if storage.isFavorite(id: movie.id) {
+            storage.delete(by: movie.id)
+        } else {
+            storage.save(movie: movie)
+        }
+        // Можно сразу обновить список — вызываем fetchFavorites()
+        // (Presenter при необходимости перерисует View)
+        fetchFavorites()
     }
 }
-
-

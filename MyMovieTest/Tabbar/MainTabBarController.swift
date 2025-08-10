@@ -8,6 +8,7 @@
 import UIKit
 
 final class MainTabBarController: UITabBarController {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTabs()
@@ -27,18 +28,17 @@ final class MainTabBarController: UITabBarController {
     private func setupAppearance() {
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .lightGray.withAlphaComponent(0.8) // цвет фона таббара
-
-        // Настраиваем цвета иконок
+        appearance.backgroundColor =  .white
+        
         let normalColor = UIColor.myPinkOne
         let selectedColor = UIColor.myPinkSecond
-
+        
         appearance.stackedLayoutAppearance.normal.iconColor = normalColor
         appearance.stackedLayoutAppearance.selected.iconColor = selectedColor
-
+        
         appearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: normalColor]
         appearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: selectedColor]
-
+        
         tabBar.standardAppearance = appearance
         if #available(iOS 15.0, *) {
             tabBar.scrollEdgeAppearance = appearance
