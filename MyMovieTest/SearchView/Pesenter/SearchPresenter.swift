@@ -19,13 +19,16 @@ final class SearchPresenter {
     private let interactor: SearchInteractorProtocol
     private let router: SearchRouterProtocol
     private let favoriteService: FavoriteMovieStoring
-
+    private let errorHandler: ErrorHandlerProtocol
+    
     init(interactor: SearchInteractorProtocol,
          router: SearchRouterProtocol,
-         favoriteService: FavoriteMovieStoring) {
+         favoriteService: FavoriteMovieStoring,
+         errorHandler: ErrorHandlerProtocol) {
         self.interactor = interactor
         self.router = router
         self.favoriteService = favoriteService
+        self.errorHandler = errorHandler
     }
 }
 
@@ -36,21 +39,20 @@ extension SearchPresenter: SearchPresenterProtocol {
             await interactor.searchMovies(query: query)
         }
     }
-
+    
     func didSelectMovie(_ movie: Movie) {
         router.openDetail(for: movie)
     }
-
+    
     func toggleFavorite(movie: Movie) {
         if favoriteService.isFavorite(id: movie.id) {
             favoriteService.delete(by: movie.id)
         } else {
             favoriteService.save(movie: movie)
         }
-        // уведомляем интерактор → он пробросит в output
         NotificationCenter.default.post(name: .favoritesDidChange, object: nil)
     }
-
+    
     func isFavorite(id: Int) -> Bool {
         favoriteService.isFavorite(id: id)
     }
@@ -61,12 +63,13 @@ extension SearchPresenter: SearchInteractorOutputProtocol {
         view?.hideLoading()
         view?.showMovies(movies)
     }
-
+    
     func didFailToReceiveMovies(_ error: Error) {
         view?.hideLoading()
-        view?.showError(error.localizedDescription)
+        let message = errorHandler.message(for: error)
+        view?.showError(message)
     }
-
+    
     func favoritesDidChange() {
         // Просто перерисовываем коллекцию
         if let vc = view as? SearchViewController {

@@ -20,7 +20,7 @@ final class AppDIContainer {
     }
     
     private func registerDependencies() {
-// MARK: - Сервисы
+        // MARK: - Сервисы
         container.register(MovieServiceProtocol.self) { _ in
             MovieService()
         }
@@ -29,7 +29,11 @@ final class AppDIContainer {
             CoreDataService()
         }
         
-// MARK: - Search Module
+        container.register(ErrorHandlerProtocol.self) { _ in
+            ErrorHandler()
+        }
+        
+        // MARK: - Search Module
         container.register(SearchInteractorProtocol.self) { resolver in
             let service = resolver.resolve(MovieServiceProtocol.self)!
             let favoriteService = resolver.resolve(FavoriteMovieStoring.self)!
@@ -40,7 +44,7 @@ final class AppDIContainer {
             SearchRouter()
         }
         
-// MARK: - Favorites Module
+        // MARK: - Favorites Module
         container.register(FavoritesInteractorProtocol.self) { resolver in
             let storage = resolver.resolve(FavoriteMovieStoring.self)!
             return FavoritesInteractor(storage: storage)
@@ -50,8 +54,8 @@ final class AppDIContainer {
             FavoritesRouter()
         }
     }
-
-// MARK: - Вспомогательные методы для получения VC
+    
+    // MARK: - Вспомогательные методы для получения VC
     func resolveSearchInteractor() -> SearchInteractorProtocol {
         container.resolve(SearchInteractorProtocol.self)!
     }

@@ -37,10 +37,6 @@ final class SearchInteractor: SearchInteractorProtocol {
         )
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
     func searchMovies(query: String) async {
         do {
             let movies = try await service.searchMovies(query: query)
@@ -58,5 +54,9 @@ final class SearchInteractor: SearchInteractorProtocol {
         DispatchQueue.main.async { [weak self] in
             self?.output?.favoritesDidChange()
         }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }

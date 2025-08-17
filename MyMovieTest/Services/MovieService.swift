@@ -22,7 +22,8 @@ final class MovieService: MovieServiceProtocol {
         do {
             apiKey = try KeychainManager.shared.getToken(for: tokenKey)
         } catch {
-            throw NSError(domain: "MovieService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Не удалось получить API-ключ: \(error.localizedDescription)"])
+            print("❌ Не удалось получить API-ключ: \(error.localizedDescription)")
+            throw AppError.unknownError
         }
         
         // Формирование URL и параметров запроса
@@ -37,24 +38,26 @@ final class MovieService: MovieServiceProtocol {
         
         // Обработка результата
         switch dataResponse.result {
-            
         case .success(let data):
-            // Логирование JSON-ответа для отладки
             if let jsonString = String(data: data, encoding: .utf8) {
                 print("🔥 JSON-ответ сервера:\n\(jsonString)")
             }
-            // Декодирование ответа
             do {
                 let movieResponse = try JSONDecoder().decode(KinopoiskMovieResponse.self, from: data)
                 return movieResponse.docs
             } catch {
                 print("❌ Ошибка декодирования: \(error.localizedDescription)")
-                throw NSError(domain: "MovieService", code: -2, userInfo: [NSLocalizedDescriptionKey: "Не удалось декодировать ответ: \(error.localizedDescription)"])
+                throw AppError.decodingError
             }
             
-        case .failure(let error):
-            print("❌ Ошибка запроса: \(error.localizedDescription)")
-            throw NSError(domain: "MovieService", code: -3, userInfo: [NSLocalizedDescriptionKey: "Не удалось загрузить фильмы: \(error.localizedDescription)"])
+        case .failure(let afError):
+            print("❌ Ошибка запроса: \(afError.localizedDescription)")
+            if let urlError = afError.underlyingError as? URLError {
+                print("⚠️ URLError код: \(urlError.code)")
+                throw urlError
+            } else {
+                throw AppError.networkError
+            }
         }
     }
 }

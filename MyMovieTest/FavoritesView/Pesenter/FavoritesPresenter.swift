@@ -17,10 +17,14 @@ final class FavoritesPresenter: FavoritesPresenterProtocol {
     weak var view: FavoritesViewProtocol?
     private let interactor: FavoritesInteractorProtocol
     private let router: FavoritesRouterProtocol
+    private let errorHandler: ErrorHandlerProtocol
     
-    init(interactor: FavoritesInteractorProtocol, router: FavoritesRouterProtocol) {
+    init(interactor: FavoritesInteractorProtocol,
+         router: FavoritesRouterProtocol,
+         errorHandler: ErrorHandlerProtocol) {   
         self.interactor = interactor
         self.router = router
+        self.errorHandler = errorHandler
         
         NotificationCenter.default.addObserver(
             self,

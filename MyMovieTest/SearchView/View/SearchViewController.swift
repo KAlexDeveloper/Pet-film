@@ -33,6 +33,9 @@ final class SearchViewController: UIViewController {
         label.text = "Ничего не найдено"
         label.textAlignment = .center
         label.isHidden = true
+        label.font = .systemFont(ofSize: 18, weight: .medium)
+        label.textColor = .gray
+        label.isHidden = true
         return label
     }()
     
