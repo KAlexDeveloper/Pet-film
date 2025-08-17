@@ -10,38 +10,44 @@ import UIKit
 final class AppBuilder {
     
     static func buildSearch() -> UIViewController {
-        let container = AppDIContainer.shared.container
         let view = SearchViewController()
+        let container = AppDIContainer.shared
         
-        guard let interactor = container.resolve(SearchInteractorProtocol.self) as? SearchInteractor,
-              let router = container.resolve(SearchRouterProtocol.self) as? SearchRouter,
-              let favoriteService = container.resolve(FavoriteMovieStoring.self) else {
-            fatalError("Не удалось разрешить зависимости")
-        }
+        // Получаем зависимости из контейнера
+        let interactor = container.resolveSearchInteractor()
+        let router = container.resolveSearchRouter()
+        let favoriteService = container.resolveFavoriteStorage()
         
+        // Создаём презентер вручную
         let presenter = SearchPresenter(interactor: interactor, router: router, favoriteService: favoriteService)
         presenter.view = view
+        
+        // Соединяем компоненты
         interactor.output = presenter
         router.viewController = view
         view.presenter = presenter
         
         return view
     }
+    
     static func buildFavorites() -> UIViewController {
-        let container = AppDIContainer.shared.container
         let view = FavoritesViewController()
+        let container = AppDIContainer.shared
         
-        guard let interactor = container.resolve(FavoritesInteractorProtocol.self),
-              let router = container.resolve(FavoritesRouterProtocol.self) else {
-            fatalError("Не удалось разрешить зависимости для Favorites")
-        }
+        // Получаем зависимости из контейнера
+        let interactor = container.resolveFavoritesInteractor()
+        let router = container.resolveFavoritesRouter()
         
+        // Создаём презентер вручную
         let presenter = FavoritesPresenter(interactor: interactor, router: router)
         presenter.view = view
-        interactor.output = presenter  
+        
+        // Соединяем компоненты
+        interactor.output = presenter
         router.viewController = view
         view.presenter = presenter
         
         return view
     }
 }
+

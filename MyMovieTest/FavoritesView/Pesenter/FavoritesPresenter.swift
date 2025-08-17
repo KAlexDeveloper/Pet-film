@@ -21,6 +21,13 @@ final class FavoritesPresenter: FavoritesPresenterProtocol {
     init(interactor: FavoritesInteractorProtocol, router: FavoritesRouterProtocol) {
         self.interactor = interactor
         self.router = router
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(favoritesDidChange),
+            name: .favoritesDidChange,
+            object: nil
+        )
     }
     
     func viewDidLoad() {
@@ -33,7 +40,10 @@ final class FavoritesPresenter: FavoritesPresenterProtocol {
     
     func toggleFavorite(movie: Movie) {
         interactor.toggleFavorite(movie: movie)
-        // interactor.fetchFavorites() вызывается внутри toggleFavorite -> при завершении output вернёт новые данные
+    }
+    
+    @objc private func favoritesDidChange() {
+        interactor.fetchFavorites()
     }
 }
 

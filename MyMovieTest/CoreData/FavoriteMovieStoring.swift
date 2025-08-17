@@ -36,6 +36,7 @@ final class CoreDataService: FavoriteMovieStoring {
         entity.year = movie.releaseDate ?? ""
         entity.rating = movie.rating?.kp ?? 0.0
         CoreDataManager.shared.saveContext()
+        NotificationCenter.default.post(name: .favoritesDidChange, object: nil)
     }
     
     func delete(by id: Int) {
@@ -44,6 +45,7 @@ final class CoreDataService: FavoriteMovieStoring {
         if let result = try? context.fetch(request), let object = result.first {
             context.delete(object)
             CoreDataManager.shared.saveContext()
+            NotificationCenter.default.post(name: .favoritesDidChange, object: nil)
         }
     }
     
@@ -52,4 +54,7 @@ final class CoreDataService: FavoriteMovieStoring {
         request.predicate = NSPredicate(format: "id == %d", id)
         return ((try? context.fetch(request))?.first) != nil
     }
+}
+extension Notification.Name {
+    static let favoritesDidChange = Notification.Name("favoritesDidChange")
 }

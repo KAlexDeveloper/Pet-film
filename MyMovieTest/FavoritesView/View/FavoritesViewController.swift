@@ -46,7 +46,7 @@ final class FavoritesViewController: UIViewController {
     }
     
     private func setupUI() {
-        // Заголовок как в SearchView
+        // Заголовок
         labelName.text = "Избранное"
         labelName.textColor = .myPinkSecond
         labelName.font = .systemFont(ofSize: 26, weight: .bold)
@@ -123,7 +123,7 @@ extension FavoritesViewController: UICollectionViewDataSource, UICollectionViewD
         presenter.toggleFavorite(movie: movie)
     }
     
-    // Размер как в SearchView
+    // Размер
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let padding: CGFloat = 10 * 2
         let width = collectionView.frame.width - padding

@@ -18,8 +18,5 @@ final class FavoritesRouter: FavoritesRouterProtocol {
     func openDetail(for movie: FavoriteMovieEntity) {
         print("Открыть детали для фильма: \(movie.title ?? "")")
         // Здесь будет переход к Detail-модулю
-        // Например:
-        // let detailVC = DetailBuilder.build(with: movie.id)
-        // viewController?.navigationController?.pushViewController(detailVC, animated: true)
     }
 }

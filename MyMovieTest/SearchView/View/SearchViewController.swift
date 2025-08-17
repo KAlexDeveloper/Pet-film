@@ -26,7 +26,7 @@ final class SearchViewController: UIViewController {
     private let searchButton = UIButton(type: .custom)
     private let leftSeparatorView = UIView()
     private let rightSeparatorView = UIView()
-    private let collectionView: UICollectionView
+    let collectionView: UICollectionView
     private let activityIndicator = UIActivityIndicatorView(style: .large)
     private let emptyLabel: UILabel = {
         let label = UILabel()
@@ -47,6 +47,7 @@ final class SearchViewController: UIViewController {
         self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         super.init(nibName: nil, bundle: nil)
     }
+    
     
     required init?(coder: NSCoder) {
         fatalError()

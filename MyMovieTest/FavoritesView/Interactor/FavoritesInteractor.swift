@@ -32,16 +32,15 @@ final class FavoritesInteractor: FavoritesInteractorProtocol {
             self?.output?.didLoadFavorites(items)
         }
     }
-    
     func toggleFavorite(movie: Movie) {
-        // Если уже в избранном — удаляем, иначе сохраняем
         if storage.isFavorite(id: movie.id) {
             storage.delete(by: movie.id)
         } else {
             storage.save(movie: movie)
         }
-        // Можно сразу обновить список — вызываем fetchFavorites()
-        // (Presenter при необходимости перерисует View)
+        // уведомляем всех, что избранное изменилось
+        NotificationCenter.default.post(name: .favoritesDidChange, object: nil)
+        
         fetchFavorites()
     }
 }

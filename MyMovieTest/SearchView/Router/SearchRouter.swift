@@ -10,13 +10,14 @@ import UIKit
 
 protocol SearchRouterProtocol: AnyObject {
     func openDetail(for movie: Movie)
+    var viewController: UIViewController? { get set }
 }
 
 final class SearchRouter: SearchRouterProtocol {
     weak var viewController: UIViewController?
     
     func openDetail(for movie: Movie) {
-        // Здесь позже подключим переход к деталям
+        // Здесь позже подключу переход к деталям
         print("Open detail for: \(movie.title)")
     }
 }
