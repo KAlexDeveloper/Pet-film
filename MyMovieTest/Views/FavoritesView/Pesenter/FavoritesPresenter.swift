@@ -25,13 +25,6 @@ final class FavoritesPresenter: FavoritesPresenterProtocol {
         self.interactor = interactor
         self.router = router
         self.errorHandler = errorHandler
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(favoritesDidChange),
-            name: .favoritesDidChange,
-            object: nil
-        )
     }
     
     func viewDidLoad() {
@@ -45,13 +38,17 @@ final class FavoritesPresenter: FavoritesPresenterProtocol {
     func toggleFavorite(movie: Movie) {
         interactor.toggleFavorite(movie: movie)
     }
-    
-    @objc private func favoritesDidChange() {
-        interactor.fetchFavorites()
-    }
 }
 
 extension FavoritesPresenter: FavoritesInteractorOutputProtocol {
+    func favoritesDidChange(_ movies: [FavoriteMovieEntity]) {
+            if movies.isEmpty {
+                view?.showEmptyMessage()
+            } else {
+                view?.show(favorites: movies)
+            }
+        }
+    
     func didLoadFavorites(_ movies: [FavoriteMovieEntity]) {
         if movies.isEmpty {
             view?.showEmptyMessage()

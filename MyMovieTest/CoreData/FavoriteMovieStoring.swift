@@ -55,6 +55,6 @@ final class CoreDataService: FavoriteMovieStoring {
         return ((try? context.fetch(request))?.first) != nil
     }
 }
-extension Notification.Name {
-    static let favoritesDidChange = Notification.Name("favoritesDidChange")
-}
+//extension Notification.Name {
+//    static let favoritesDidChange = Notification.Name("favoritesDidChange")
+//}

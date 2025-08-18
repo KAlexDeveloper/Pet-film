@@ -7,15 +7,15 @@
 
 import Foundation
 
-protocol SearchInteractorProtocol: AnyObject {
-    func searchMovies(query: String) async
-    var output: SearchInteractorOutputProtocol? { get set }
-}
-
 protocol SearchInteractorOutputProtocol: AnyObject {
     func didReceiveMovies(_ movies: [Movie])
     func didFailToReceiveMovies(_ error: Error)
-    func favoritesDidChange() 
+    func favoritesDidChange()
+}
+
+protocol SearchInteractorProtocol: AnyObject {
+    func searchMovies(query: String) async
+    var output: SearchInteractorOutputProtocol? { get set }
 }
 
 final class SearchInteractor: SearchInteractorProtocol {
@@ -28,7 +28,6 @@ final class SearchInteractor: SearchInteractorProtocol {
         self.service = service
         self.favoriteService = favoriteService
         
-        // Подписка на изменения избранного
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(favoritesDidChangeNotification),
@@ -55,7 +54,7 @@ final class SearchInteractor: SearchInteractorProtocol {
             self?.output?.favoritesDidChange()
         }
     }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }

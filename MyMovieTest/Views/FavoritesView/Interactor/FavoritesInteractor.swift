@@ -8,6 +8,7 @@ import Foundation
 
 protocol FavoritesInteractorOutputProtocol: AnyObject {
     func didLoadFavorites(_ movies: [FavoriteMovieEntity])
+    func favoritesDidChange(_ movies: [FavoriteMovieEntity])
 }
 
 protocol FavoritesInteractorProtocol: AnyObject {
@@ -22,6 +23,13 @@ final class FavoritesInteractor: FavoritesInteractorProtocol {
     
     init(storage: FavoriteMovieStoring) {
         self.storage = storage
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(favoritesDidChangeNotification(_:)),
+            name: .favoritesDidChange,
+            object: nil
+        )
     }
     
     func fetchFavorites() {
@@ -38,9 +46,18 @@ final class FavoritesInteractor: FavoritesInteractorProtocol {
         } else {
             storage.save(movie: movie)
         }
-        // уведомляем всех, что избранное изменилось
         NotificationCenter.default.post(name: .favoritesDidChange, object: nil)
-        
         fetchFavorites()
     }
+    
+    @objc private func favoritesDidChangeNotification(_ notification: Notification) {
+        let items = storage.fetchAll()
+        DispatchQueue.main.async { [weak self] in
+            self?.output?.favoritesDidChange(items)
+        }
+    }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 }
+

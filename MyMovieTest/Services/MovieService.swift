@@ -35,8 +35,8 @@ final class MovieService: MovieServiceProtocol {
         let request = AF.request(url, parameters: parameters, headers: headers)
             .validate(statusCode: 200..<300)
         let dataResponse = await request.serializingData().response
+  
         
-        // Обработка результата
         switch dataResponse.result {
         case .success(let data):
             if let jsonString = String(data: data, encoding: .utf8) {
