@@ -69,7 +69,7 @@ final class MovieCell: UICollectionViewCell {
         titleLabel.text = movie.title
         
         let country = movie.countries?.first?.name ?? "Страна неизвестна"
-        yearCountryLabel.text = "\(movie.releaseDate), \(country)"
+        yearCountryLabel.text = "\(movie.releaseDate), \(country)" 
         
         let imdbRating = movie.rating?.imdb ?? 0.0
         let kpRating = movie.rating?.kp ?? 0.0
@@ -87,6 +87,12 @@ final class MovieCell: UICollectionViewCell {
         posterImageView.tintColor = .lightGray
         posterImageView.contentMode = .scaleAspectFit
         posterImageView.backgroundColor = .systemGray5
+
+        if let url = movie?.posterUrl {
+            posterImageView.setImage(from: url)
+        }
+           
+        
         
         guard let urlString = urlString, let url = URL(string: urlString) else { return }
         currentImageURL = url
