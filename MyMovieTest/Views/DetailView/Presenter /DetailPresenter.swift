@@ -11,18 +11,23 @@ import UIKit
 
 protocol DetailPresenterProtocol: AnyObject {
     func viewDidLoad()
+    func didTapBack()
+    func showError(_ message: String)
 }
 
 final class DetailPresenter {
     weak var view: DetailViewProtocol?
     private let interactor: DetailInteractorProtocol
+    private let router: DetailRouterProtocol
     private let errorHandler: ErrorHandlerProtocol
     private let movieId: Int
     
     init(interactor: DetailInteractorProtocol,
+         router: DetailRouterProtocol,
          errorHandler: ErrorHandlerProtocol,
          movieId: Int) {
         self.interactor = interactor
+        self.router = router
         self.errorHandler = errorHandler
         self.movieId = movieId
     }
@@ -34,18 +39,25 @@ extension DetailPresenter: DetailPresenterProtocol {
             await interactor.fetchMovieDetails(id: movieId)
         }
     }
+
+    func didTapBack() {
+        router.popViewController()
+    }
+
+    func showError(_ message: String) {
+        router.showError(from: view, message: message)
+    }
 }
 
 extension DetailPresenter: DetailInteractorOutputProtocol {
     func didReceiveMovieDetails(_ movie: Movie) {
         view?.showMovieDetails(movie)
-        
         if let posterUrl = movie.posterUrl {
             Task {
                 await interactor.fetchPoster(url: posterUrl)
             }
         } else {
-            view?.updatePoster(nil) // если постера нет → заглушка
+            view?.updatePoster(nil)
         }
     }
     

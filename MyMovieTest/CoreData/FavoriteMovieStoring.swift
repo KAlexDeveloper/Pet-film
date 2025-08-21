@@ -31,9 +31,9 @@ final class CoreDataService: FavoriteMovieStoring {
         
         let entity = FavoriteMovieEntity(context: context)
         entity.id = Int64(movie.id)
-        entity.title = movie.title ?? ""
+        entity.title = movie.title
         entity.posterUrl = movie.posterUrl ?? ""
-        entity.year = movie.releaseDate ?? ""
+        entity.year = movie.releaseDate
         entity.rating = movie.rating?.kp ?? 0.0
         CoreDataManager.shared.saveContext()
         NotificationCenter.default.post(name: .favoritesDidChange, object: nil)
@@ -55,6 +55,3 @@ final class CoreDataService: FavoriteMovieStoring {
         return ((try? context.fetch(request))?.first) != nil
     }
 }
-//extension Notification.Name {
-//    static let favoritesDidChange = Notification.Name("favoritesDidChange")
-//}

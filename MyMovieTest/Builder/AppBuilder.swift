@@ -73,13 +73,15 @@ final class AppBuilder {
         let view = DetailViewController()
         let container = AppDIContainer.shared
         
-        // Получаем зависимости
+        // Получаем зависимости из контейнера
         let interactor = container.resolveDetailInteractor()
+        let router = container.resolveDetailRouter()
         let errorHandler = container.container.resolve(ErrorHandlerProtocol.self)!
         
         // Создаём презентер вручную
         let presenter = DetailPresenter(
             interactor: interactor,
+            router: router,
             errorHandler: errorHandler,
             movieId: movieId
         )
@@ -88,6 +90,9 @@ final class AppBuilder {
         // Соединяем компоненты
         if let interactor = interactor as? DetailInteractor {
             interactor.output = presenter
+        }
+        if let router = router as? DetailRouter {
+            router.viewController = view
         }
         view.presenter = presenter
         

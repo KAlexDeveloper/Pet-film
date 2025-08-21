@@ -87,9 +87,6 @@ final class AppDIContainer {
     }
     
     // MARK: - Detail
-//    func resolveDetailInteractor(movieId: Int) -> DetailInteractorProtocol {
-//        container.resolve(DetailInteractorProtocol.self, argument: movieId)!
-//    }
     func resolveDetailInteractor() -> DetailInteractorProtocol {
         container.resolve(DetailInteractorProtocol.self)!
     }
@@ -99,5 +96,3 @@ final class AppDIContainer {
     }
     
 }
-
-

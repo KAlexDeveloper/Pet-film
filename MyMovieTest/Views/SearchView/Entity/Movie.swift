@@ -17,7 +17,7 @@ struct KinopoiskMovieResponse: Decodable {
 
 struct Movie: Decodable {
     let id: Int
-    let name: String
+    let name: String?
     let alternativeName: String?
     let description: String?
     let year: Int?
@@ -28,7 +28,7 @@ struct Movie: Decodable {
     let countries: [Country]?
     let externalId: ExternalID?
     
-    var title: String { name }
+    var title: String { name ?? alternativeName ?? "Название пусто" }
     var overview: String { description ?? "Описание отсутствует" }
     var releaseDate: String {
         if let year = year {
