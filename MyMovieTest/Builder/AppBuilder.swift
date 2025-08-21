@@ -8,17 +8,17 @@
 import UIKit
 
 final class AppBuilder {
-
+    
     static func buildSearch() -> UIViewController {
         let view = SearchViewController()
         let container = AppDIContainer.shared
-
+        
         // Получаем зависимости из контейнера
         let interactor = container.resolveSearchInteractor()
         let router = container.resolveSearchRouter()
         let favoriteService = container.resolveFavoriteStorage()
         let errorHandler = container.container.resolve(ErrorHandlerProtocol.self)!
-
+        
         // Создаём презентер вручную
         let presenter = SearchPresenter(
             interactor: interactor,
@@ -27,7 +27,7 @@ final class AppBuilder {
             errorHandler: errorHandler
         )
         presenter.view = view
-
+        
         // Соединяем компоненты
         if let interactor = interactor as? SearchInteractor {
             interactor.output = presenter
@@ -36,19 +36,19 @@ final class AppBuilder {
             router.viewController = view
         }
         view.presenter = presenter
-
+        
         return view
     }
-
+    
     static func buildFavorites() -> UIViewController {
         let view = FavoritesViewController()
         let container = AppDIContainer.shared
-
+        
         // Получаем зависимости из контейнера
         let interactor = container.resolveFavoritesInteractor()
         let router = container.resolveFavoritesRouter()
         let errorHandler = container.container.resolve(ErrorHandlerProtocol.self)!
-
+        
         // Создаём презентер вручную
         let presenter = FavoritesPresenter(
             interactor: interactor,
@@ -56,7 +56,7 @@ final class AppBuilder {
             errorHandler: errorHandler
         )
         presenter.view = view
-
+        
         // Соединяем компоненты
         if let interactor = interactor as? FavoritesInteractor {
             interactor.output = presenter
@@ -65,7 +65,32 @@ final class AppBuilder {
             router.viewController = view
         }
         view.presenter = presenter
-
+        
+        return view
+    }
+    
+    static func buildDetail(movieId: Int) -> UIViewController {
+        let view = DetailViewController()
+        let container = AppDIContainer.shared
+        
+        // Получаем зависимости
+        let interactor = container.resolveDetailInteractor()
+        let errorHandler = container.container.resolve(ErrorHandlerProtocol.self)!
+        
+        // Создаём презентер вручную
+        let presenter = DetailPresenter(
+            interactor: interactor,
+            errorHandler: errorHandler,
+            movieId: movieId
+        )
+        presenter.view = view
+        
+        // Соединяем компоненты
+        if let interactor = interactor as? DetailInteractor {
+            interactor.output = presenter
+        }
+        view.presenter = presenter
+        
         return view
     }
 }

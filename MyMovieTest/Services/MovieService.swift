@@ -11,11 +11,13 @@ import Alamofire
 
 protocol MovieServiceProtocol {
     func searchMovies(query: String) async throws -> [Movie]
+    func fetchMovieDetails(id: Int) async throws -> Movie
 }
 
 final class MovieService: MovieServiceProtocol {
     private let tokenKey = "kinopoiskApiKey"
     
+    // поиск кино
     func searchMovies(query: String) async throws -> [Movie] {
         // Получение API-ключа из Keychain
         let apiKey: String
@@ -35,7 +37,7 @@ final class MovieService: MovieServiceProtocol {
         let request = AF.request(url, parameters: parameters, headers: headers)
             .validate(statusCode: 200..<300)
         let dataResponse = await request.serializingData().response
-  
+        
         
         switch dataResponse.result {
         case .success(let data):
@@ -58,6 +60,31 @@ final class MovieService: MovieServiceProtocol {
             } else {
                 throw AppError.networkError
             }
+        }
+    }
+    
+    //запрос на получениме деталий о кино
+    func fetchMovieDetails(id: Int) async throws -> Movie {
+        let apiKey = try KeychainManager.shared.getToken(for: tokenKey)
+        
+        let url = "https://api.kinopoisk.dev/v1.4/movie/\(id)"
+        let headers: HTTPHeaders = ["X-API-KEY": apiKey]
+        
+        let request = AF.request(url, headers: headers).validate(statusCode: 200..<300)
+        let dataResponse = await request.serializingData().response
+        
+        switch dataResponse.result {
+        case .success(let data):
+            do {
+                let movie = try JSONDecoder().decode(Movie.self, from: data)
+                return movie
+            } catch {
+                print("❌ Ошибка декодирования деталей: \(error)")
+                throw AppError.decodingError
+            }
+        case .failure(let afError):
+            print("❌ Ошибка сети: \(afError)")
+            throw AppError.networkError
         }
     }
 }

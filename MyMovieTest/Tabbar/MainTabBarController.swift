@@ -17,18 +17,32 @@ final class MainTabBarController: UITabBarController {
     
     private func setupTabs() {
         let searchVC = AppBuilder.buildSearch()
-        searchVC.tabBarItem = UITabBarItem(title: "Поиск", image: UIImage(systemName: "magnifyingglass"), selectedImage: UIImage(systemName: "magnifyingglass"))
-        
         let favoritesVC = AppBuilder.buildFavorites()
-        favoritesVC.tabBarItem = UITabBarItem(title: "Избранное", image: UIImage(systemName: "heart"), selectedImage: UIImage(systemName: "heart.fill"))
         
-        viewControllers = [searchVC, favoritesVC]
+        // Оборачиваем в UINavigationController
+        let searchNav = UINavigationController(rootViewController: searchVC)
+        let favoritesNav = UINavigationController(rootViewController: favoritesVC)
+        
+        // Настраиваем таббар айтемы на nav-контроллерах
+        searchNav.tabBarItem = UITabBarItem(
+            title: "Поиск",
+            image: UIImage(systemName: "magnifyingglass"),
+            selectedImage: UIImage(systemName: "magnifyingglass")
+        )
+        
+        favoritesNav.tabBarItem = UITabBarItem(
+            title: "Избранное",
+            image: UIImage(systemName: "heart"),
+            selectedImage: UIImage(systemName: "heart.fill")
+        )
+        
+        viewControllers = [searchNav, favoritesNav]
     }
     
     private func setupAppearance() {
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor =  .white
+        appearance.backgroundColor = .white
         
         let normalColor = UIColor.myPinkOne
         let selectedColor = UIColor.myPinkSecond

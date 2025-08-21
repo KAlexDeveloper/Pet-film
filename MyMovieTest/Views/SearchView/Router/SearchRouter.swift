@@ -17,7 +17,8 @@ final class SearchRouter: SearchRouterProtocol {
     weak var viewController: UIViewController?
     
     func openDetail(for movie: Movie) {
-        // Здесь позже подключу переход к деталям
+        let detailVC = AppBuilder.buildDetail(movieId: movie.id)
+        viewController?.navigationController?.pushViewController(detailVC, animated: true)
         print("Open detail for: \(movie.title)")
     }
 }

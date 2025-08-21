@@ -53,6 +53,16 @@ final class AppDIContainer {
         container.register(FavoritesRouterProtocol.self) { _ in
             FavoritesRouter()
         }
+        
+        // MARK: - Detail Module
+        container.register(DetailInteractorProtocol.self) { resolver in
+            let service = resolver.resolve(MovieServiceProtocol.self)!
+            return DetailInteractor(service: service)
+        }
+        
+        container.register(DetailRouterProtocol.self) { _ in
+            DetailRouter()
+        }
     }
     
     // MARK: - Вспомогательные методы для получения VC
@@ -75,6 +85,19 @@ final class AppDIContainer {
     func resolveFavoriteStorage() -> FavoriteMovieStoring {
         container.resolve(FavoriteMovieStoring.self)!
     }
+    
+    // MARK: - Detail
+//    func resolveDetailInteractor(movieId: Int) -> DetailInteractorProtocol {
+//        container.resolve(DetailInteractorProtocol.self, argument: movieId)!
+//    }
+    func resolveDetailInteractor() -> DetailInteractorProtocol {
+        container.resolve(DetailInteractorProtocol.self)!
+    }
+    
+    func resolveDetailRouter() -> DetailRouterProtocol {
+        container.resolve(DetailRouterProtocol.self)!
+    }
+    
 }
 
 

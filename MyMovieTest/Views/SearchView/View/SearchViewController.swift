@@ -16,7 +16,7 @@ protocol SearchViewProtocol: AnyObject {
 }
 
 final class SearchViewController: UIViewController {
-    var presenter: SearchPresenterProtocol!
+    var presenter: SearchPresenterProtocol?
     
     private let labelName = UILabel()
     private let searchContainerView = UIView()
@@ -186,7 +186,7 @@ final class SearchViewController: UIViewController {
     
     @objc private func searchTapped() {
         guard let query = searchTextField.text, !query.isEmpty else { return }
-        presenter.searchButtonTapped(with: query)
+        presenter?.searchButtonTapped(with: query)
     }
 }
 
@@ -232,7 +232,7 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let movie = movies[indexPath.item]
-        presenter.didSelectMovie(movie)
+        presenter?.didSelectMovie(movie)
     }
 }
 extension SearchViewController: UICollectionViewDelegateFlowLayout {

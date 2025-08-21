@@ -88,9 +88,9 @@ final class MovieCell: UICollectionViewCell {
         posterImageView.contentMode = .scaleAspectFit
         posterImageView.backgroundColor = .systemGray5
 
-        if let url = movie?.posterUrl {
-            posterImageView.setImage(from: url)
-        }
+//        if let url = movie?.posterUrl {
+//            posterImageView.setImage(from: url)
+//        }
            
         
         
