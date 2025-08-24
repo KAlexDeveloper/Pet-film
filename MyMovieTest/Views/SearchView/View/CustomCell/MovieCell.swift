@@ -71,10 +71,26 @@ final class MovieCell: UICollectionViewCell {
         let country = movie.countries?.first?.name ?? "Страна неизвестна"
         yearCountryLabel.text = "\(movie.releaseDate), \(country)"
         
-        let imdbRating = movie.rating?.imdb ?? 0.0
-        let kpRating = movie.rating?.kp ?? 0.0
-        let averageRating = imdbRating > 0 ? imdbRating : kpRating > 0 ? kpRating : 0.0
-        ratingLabel.text = averageRating > 0 ? "Оценка: \(String(format: "%.1f", averageRating))" : "Оценка отсутствует"
+//        let imdbRating = movie.rating?.imdb ?? 0.0
+//        let kpRating = movie.rating?.kp ?? 0.0
+//        let averageRating = imdbRating > 0 ? imdbRating : kpRating > 0 ? kpRating : 0.0
+//        ratingLabel.text = averageRating > 0 ? "Оценка: \(String(format: "%.1f", averageRating))" : "Оценка отсутствует"
+        // Оценки
+           let kpRatingText: String
+           if let kp = movie.rating?.kp {
+               kpRatingText = String(format: "%.1f", kp) // округляем до десятых
+           } else {
+               kpRatingText = "–"
+           }
+           
+           let imdbRatingText: String
+           if let imdb = movie.rating?.imdb {
+               imdbRatingText = String(format: "%.1f", imdb) // округляем до десятых
+           } else {
+               imdbRatingText = "–"
+           }
+           
+           ratingLabel.text = "Оценка: KP \(kpRatingText) | IMDb \(imdbRatingText)"
         
         overviewLabel.text = movie.description?.isEmpty == false ? movie.description : "Описание отсутствует"
         overviewLabel.isHidden = false

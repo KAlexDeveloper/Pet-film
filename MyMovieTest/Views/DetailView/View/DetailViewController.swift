@@ -145,7 +145,7 @@ extension DetailViewController: DetailViewProtocol {
         
         let kp = movie.rating?.kp ?? 0
         let imdb = movie.rating?.imdb ?? 0
-        ratingLabel.text = "⭐️ KP: \(kp) | IMDb: \(imdb)"
+        ratingLabel.text = "Оценка: KP: \(kp) | IMDb: \(imdb)"
         
         let genres = movie.genres?.map { $0.name }.joined(separator: ", ") ?? "Нет жанров"
         genresLabel.text = "Жанры: \(genres)"
