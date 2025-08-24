@@ -33,10 +33,14 @@ final class AppDIContainer {
             ErrorHandler()
         }
         
+        container.register(ImageLoadingServiceProtocol.self) { _ in
+            ImageLoadingService()
+        }
         // MARK: - Search Module
         container.register(SearchInteractorProtocol.self) { resolver in
             let service = resolver.resolve(MovieServiceProtocol.self)!
             let favoriteService = resolver.resolve(FavoriteMovieStoring.self)!
+//            let imageService = resolver.resolve(ImageLoadingServiceProtocol.self)!
             return SearchInteractor(service: service, favoriteService: favoriteService)
         }
         
